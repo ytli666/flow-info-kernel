@@ -4183,7 +4183,7 @@ void tcp_parse_options(const struct net *net,
 					pi->elapsed_time = get_unaligned_be32(ptr + 4);
 					pi->total_size   = get_unaligned_be32(ptr + 8);
 					pi->sent_size    = get_unaligned_be32(ptr + 12);
-					pi->established_remaining_time    = get_unaligned_be32(ptr + 16);
+					pi->estimated_remaining_time    = get_unaligned_be32(ptr + 16);
 				}
 				break;
 			default:
