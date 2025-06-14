@@ -3834,16 +3834,16 @@ int do_tcp_setsockopt(struct sock *sk, int level, int optname,
 		break;
 	case TCP_FLOW_INFO: 
 		if (sockptr_is_null(optval) || optlen != sizeof(struct tcp_flow_info))
-        	return -EINVAL;
+        		return -EINVAL;
 
-    	if (!tp->flow_info) {
-        	tp->flow_info = kmalloc(sizeof(struct tcp_flow_info), GFP_KERNEL);
-        	if (!tp->flow_info)
-            	return -ENOMEM;
-    	}
+    		if (!tp->flow_info) {
+        		tp->flow_info = kmalloc(sizeof(struct tcp_flow_info), GFP_KERNEL);
+        		if (!tp->flow_info)
+            			return -ENOMEM;
+    		}
 
 		if (copy_from_sockptr(tp->flow_info, optval, sizeof(struct tcp_flow_info)))
-        	return -EFAULT;
+        		return -EFAULT;
 		break;
 	default:
 		err = -ENOPROTOOPT;
