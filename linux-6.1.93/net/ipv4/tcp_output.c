@@ -703,19 +703,19 @@ static void tcp_options_write(struct tcphdr *th, struct tcp_sock *tp,
 	}
 
 	if (unlikely(OPTION_FLOW_INFO & options)) {
-    	struct tcp_flow_info *pi = opts->flow_info;
-    	u8 *p = (u8 *)ptr;
+    		struct tcp_flow_info *pi = opts->flow_info;
+	    	u8 *p = (u8 *)ptr;
 
-    	*p++ = TCPOPT_FLOW_INFO;
-    	*p++ = TCPOLEN_FLOW_INFO;
+	    	*p++ = TCPOPT_FLOW_INFO;
+	    	*p++ = TCPOLEN_FLOW_INFO;
 
-    	put_unaligned_be32(pi->total_time,   p); p += 4;
-    	put_unaligned_be32(pi->elapsed_time, p); p += 4;
-    	put_unaligned_be32(pi->total_size,   p); p += 4;
-    	put_unaligned_be32(pi->sent_size,    p); p += 4;
-		put_unaligned_be32(pi->established_remaining_time,    p); p += 4;
+	    	put_unaligned_be32(pi->total_time,   p); p += 4;
+	    	put_unaligned_be32(pi->elapsed_time, p); p += 4;
+	    	put_unaligned_be32(pi->total_size,   p); p += 4;
+	    	put_unaligned_be32(pi->sent_size,    p); p += 4;
+		put_unaligned_be32(pi->estimated_remaining_time,    p); p += 4;
 
-    	ptr += DIV_ROUND_UP(TCPOLEN_FLOW_INFO, 4);
+	    	ptr += DIV_ROUND_UP(TCPOLEN_FLOW_INFO, 4);
 	}
 
 	smc_options_write(ptr, &options);
