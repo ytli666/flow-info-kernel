@@ -144,7 +144,7 @@ struct tcp_flow_info {
     __u32 elapsed_time;
     __u32 total_size;
     __u32 sent_size;
-	__u32 established_remaining_time;
+    __u32 estimated_remaining_time;
 };
 #endif
 
