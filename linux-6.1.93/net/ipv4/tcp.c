@@ -4434,7 +4434,7 @@ zerocopy_rcv_out:
 		return err;
 	}
 #endif
-	case TCP_FLOW_INFO:
+	case TCP_FLOW_INFO: {
 		struct tcp_flow_info info;
 		int len;
 
@@ -4454,7 +4454,8 @@ zerocopy_rcv_out:
 		len = sizeof(info);
 		if (copy_to_sockptr(optlen, &len, sizeof(len)))
 			return -EFAULT;
-        return 0;
+        	return 0;
+	}
 	default:
 		return -ENOPROTOOPT;
 	}
