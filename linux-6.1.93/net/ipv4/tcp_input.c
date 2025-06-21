@@ -4170,21 +4170,7 @@ void tcp_parse_options(const struct net *net,
 				break;
 
 			case TCPOPT_FLOW_INFO:
-				if (opsize == TCPOLEN_FLOW_INFO && skb->sk) {
-					struct tcp_sock *tp = tcp_sk(skb->sk);
-					if (!tp->flow_info) {
-						tp->flow_info = kmalloc(sizeof(struct tcp_flow_info), GFP_ATOMIC);
-						if (!tp->flow_info)
-							break;  // 記憶體不足，跳過此 option
-					}
-					struct tcp_flow_info *pi = tp->flow_info;
-
-					pi->total_time   = get_unaligned_be32(ptr);
-					pi->elapsed_time = get_unaligned_be32(ptr + 4);
-					pi->total_size   = get_unaligned_be32(ptr + 8);
-					pi->sent_size    = get_unaligned_be32(ptr + 12);
-					pi->estimated_remaining_time    = get_unaligned_be32(ptr + 16);
-				}
+				
 				break;
 			default:
 				opt_rx->saw_unknown = 1;
