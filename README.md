@@ -46,7 +46,7 @@ struct tcp_flow_info {
 
 **net/ipv4/tcp_input.c**
 
-於tcp_parse_options()增加自訂的option實作(未測試)
+於tcp_parse_options()增加自訂的option(未實作)
 
 ### 使用須知
 
