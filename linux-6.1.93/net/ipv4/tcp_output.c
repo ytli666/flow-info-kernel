@@ -702,20 +702,22 @@ static void tcp_options_write(struct tcphdr *th, struct tcp_sock *tp,
 		ptr += (len + 3) >> 2;
 	}
 
-	if (unlikely(OPTION_FLOW_INFO & options)) {
-    		struct tcp_flow_info *pi = opts->flow_info;
-	    	u8 *p = (u8 *)ptr;
+	if ((options & OPTION_FLOW_INFO)) {
+    	struct tcp_flow_info *pi = opts->flow_info;
+    	u8 *p = (u8 *)ptr;
 
-	    	*p++ = TCPOPT_FLOW_INFO;
-	    	*p++ = TCPOLEN_FLOW_INFO;
+    	*p++ = TCPOPT_FLOW_INFO;
+    	*p++ = TCPOLEN_FLOW_INFO;
 
-	    	put_unaligned_be32(pi->total_time,   p); p += 4;
-	    	put_unaligned_be32(pi->elapsed_time, p); p += 4;
-	    	put_unaligned_be32(pi->total_size,   p); p += 4;
-	    	put_unaligned_be32(pi->sent_size,    p); p += 4;
+    	put_unaligned_be32(pi->total_time,   p); p += 4;
+    	put_unaligned_be32(pi->elapsed_time, p); p += 4;
+    	put_unaligned_be32(pi->total_size,   p); p += 4;
+    	put_unaligned_be32(pi->sent_size,    p); p += 4;
 		put_unaligned_be32(pi->estimated_remaining_time,    p); p += 4;
 
-	    	ptr += DIV_ROUND_UP(TCPOLEN_FLOW_INFO, 4);
+		while (((p - (u8 *)ptr) % 4) != 0) *p++ = TCPOPT_NOP;
+
+    	ptr = (__be32 *)p;
 	}
 
 	smc_options_write(ptr, &options);
@@ -1000,11 +1002,12 @@ static unsigned int tcp_established_options(struct sock *sk, struct sk_buff *skb
 		size = MAX_TCP_OPTION_SPACE - remaining;
 	}
 
-	if (unlikely(tp->flow_info != NULL)) {
-		opts->options |= OPTION_FLOW_INFO;
-		opts->flow_info = tp->flow_info;
-		size += TCPOLEN_FLOW_INFO;
-	}
+	
+    if ((tp->flow_info != NULL) && ((size + TCPOLEN_FLOW_INFO_ALIGNED) <= MAX_TCP_OPTION_SPACE)) {
+        opts->options |= OPTION_FLOW_INFO;
+        opts->flow_info = tp->flow_info;
+        size += TCPOLEN_FLOW_INFO_ALIGNED;
+    }
 
 	return size;
 }
