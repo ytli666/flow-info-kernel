@@ -30,6 +30,7 @@ Add `struct tcp_flow_info *flow_info;` to `struct tcp_sock`.
 ```c
 #define TCPOPT_FLOW_INFO 253
 #define TCPOLEN_FLOW_INFO 22
+#define TCPOLEN_FLOW_INFO_ALIGNED 24
 ```
 
 **net/ipv4/tcp.c**
